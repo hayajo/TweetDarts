@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "TweetDarts",
+  "version": "1.0",
+  "description": "A TweetMarker extension",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "icons": {
+    "48": "img/tweetdarts-icon-48.png"
+  },
+  "page_action": {
+    "default_title": "TweetDarts",
+    "default_icon": "img/tweetdarts-page_action-disabled.png"
+  },
+  "permissions": [
+    "tabs",
+    "idle",
+    "https://api.tweetmarker.net/*",
+    "https://api.twitter.com/oauth/request_token",
+    "https://api.twitter.com/oauth/authorize",
+    "https://api.twitter.com/oauth/access_token",
+    "http://api.twitter.com/1/account/verify_credentials.json"
+  ],
+  "content_scripts": [ {
+    "matches": ["*://twitter.com/*"],
+    "js": ["jquery-1.7.1.min.js", "tweetdarts.js", "tweetdarts_content.js"],
+    "css": ["tweetdarts.css"]
+  } ],
+  "background": {
+    "scripts": ["chrome_ex_oauthsimple.js", "chrome_ex_oauth.js", "jquery-1.7.1.min.js", "twitter.js", "tweetmarker.js", "background.js"]
+  }
+}

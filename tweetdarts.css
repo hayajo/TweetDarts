@@ -1,0 +1,16 @@
+.tweetdarts .time {
+  background-color: transparent;
+  height: 0px;
+  width: 70px;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 16px solid #C69633;
+  margin-right: -14px;
+  -webkit-box-shadow: 1px 0px #000;
+}
+
+.tweetdarts .time ._timestamp {
+  position: absolute;
+  top:-8px;
+  right:2px;
+}
