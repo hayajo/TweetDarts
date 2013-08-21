@@ -4,6 +4,7 @@ function TweetDarts(username) {
   this.scrollCounter   = 0;
   this.scrollCountMax  = 5;
   this.scrolledDown    = false;
+  this.updateTimer     = undefined;
 }
 
 TweetDarts.prototype.updateDart = function() {
@@ -19,7 +20,7 @@ TweetDarts.prototype.updateDart = function() {
 TweetDarts.prototype.restoreDart = function() {
   var self = this;
   self._getMarker(function(marker) {
-    console.log("got marker", marker);
+    // console.log("got marker", marker);
     var id = marker["timeline"].id;
     var selector = self._generateTweetSelector(id);
     if (! selector)
@@ -30,6 +31,9 @@ TweetDarts.prototype.restoreDart = function() {
         return;
       $(this).addClass(self.tweetDartsClass);
       self.setIcon("enabled");
+      if (self.updateTimer)
+        clearInterval(self.updateTimer);
+      self.updateTimer = setInterval(function() { self.updateDart() }, 15000);
     });
   });
 }
@@ -76,7 +80,7 @@ TweetDarts.prototype._setMarker = function(marker, callback) {
 
 TweetDarts.prototype.__sendRequest = function(message, data, callback) {
   var request = {message: message, username: this.username, data: data};
-  console.log("sendRequest", request);
+  // console.log("sendRequest", request);
   if (callback)
     chrome.extension.sendRequest(request, callback);
   else

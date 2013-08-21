@@ -25,7 +25,7 @@ TweetMarker.prototype.fetchMarker = function(handle_success, handle_error, handl
       if (self._can_request(self._lastQueryTime.fetch, 180)) {
         return true;
       }
-      console.error("fetchMarker", self.twitter.username, "too many queries. please try again later");
+      console.warn("fetchMarker", self.twitter.username, "too many queries. please try again later");
       setTimeout(function() {
         if (handle_complete)
           handle_complete();
@@ -68,7 +68,7 @@ TweetMarker.prototype.pushMarker = function(data, handle_success, handle_error, 
       if (self._can_request(self._lastQueryTime.push, 10)) {
         return true;
       }
-      console.error("fetchMarker", self.twitter.username, "too many queries. please try again later");
+      console.warn("pushMarker", self.twitter.username, "too many queries. please try again later");
       setTimeout(function() {
         if (handle_complete)
           handle_complete();

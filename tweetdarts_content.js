@@ -17,7 +17,7 @@ function getUsername() {
 // listeners
 
 chrome.extension.onRequest.addListener(function(request, sender) {
-  console.log("onRequest", request);
+  // console.log("onRequest", request);
   switch(request.message) {
     case "click":
       td.moveToDart();
