@@ -53,7 +53,7 @@ chrome.extension.onRequest.addListener( function(request, sender, response) {
       tm.fetchMarker(
         function() {},
         function() {
-          setIcon("warning");
+          _setIcon(sender, "warning");
         },
         function() { response(tm.marker) }
       );
@@ -63,7 +63,7 @@ chrome.extension.onRequest.addListener( function(request, sender, response) {
         request.data.marker,
         function() {},
         function() {
-          setIcon("warning");
+          _setIcon(sender, "warning");
         },
         function() { response(tm.marker) }
       );

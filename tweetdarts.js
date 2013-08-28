@@ -1,14 +1,29 @@
 function TweetDarts(username) {
-  this.username        = username;
-  this.tweetDartsClass = "tweetdarts";
-  this.scrollCounter   = 0;
-  this.scrollCountMax  = 5;
-  this.scrolledDown    = false;
-  this.updateTimer     = undefined;
+  this.username             = username;
+  this.tweetDartsClass      = "tweetdarts";
+  this.scrollCounter        = 0;
+  this.scrollCountMax       = 5;
+  this.scrolledDown         = false;
+  this.updateTimer          = undefined;
+  this.supportedCollections = new Array("timeline");
+}
+
+TweetDarts.prototype.getCurrentCollection = function() {
+  if ($("#global-nav-home").hasClass("active")) {
+    return "timeline";
+  }
+  else if ($("#global-actions > li.people").hasClass("active")) {
+    return "mentions";
+  }
+  return "";
 }
 
 TweetDarts.prototype.updateDart = function() {
   var self = this;
+
+  if (!self._inSupportedCollection())
+    return false;
+
   var tweetId = self._findTopmostTweet();
   if (tweetId) {
     var data = {};
@@ -19,6 +34,10 @@ TweetDarts.prototype.updateDart = function() {
 
 TweetDarts.prototype.restoreDart = function() {
   var self = this;
+
+  if (!self._inSupportedCollection())
+    return false;
+
   self._getMarker(function(marker) {
     // console.log("got marker", marker);
     var id = marker["timeline"].id;
@@ -38,12 +57,12 @@ TweetDarts.prototype.restoreDart = function() {
   });
 }
 
-TweetDarts.prototype.setIcon = function(status) {
-  this.__sendRequest("setIcon", {status: status});
-}
-
 TweetDarts.prototype.moveToDart = function() {
   var self = this;
+
+  if (!self._inSupportedCollection())
+    return false;
+
   var selector = "li." + self.tweetDartsClass;
   var offsettop = $(window).height() - 300;
   if ($(selector).data() != null) {
@@ -70,6 +89,10 @@ TweetDarts.prototype.moveToDart = function() {
   }
 }
 
+TweetDarts.prototype.setIcon = function(status) {
+  this.__sendRequest("setIcon", {status: status});
+}
+
 TweetDarts.prototype._getMarker = function(callback) {
   this.__sendRequest("getMarker", null, callback);
 }
@@ -92,7 +115,7 @@ TweetDarts.prototype._findTopmostTweet = function() {
   $("#stream-items-id > li.js-stream-item").each(function() {
     if(
       $(this).offset().top > $(window).scrollTop() + 40
-      && !$(this).children().first().children().first().hasClass("promoted-tweet")
+      && !$(this).children().first().hasClass("promoted-tweet")
     ) {
       tweetId = $(this).find(".js-stream-tweet").attr("data-tweet-id");
       return false;
@@ -108,4 +131,12 @@ TweetDarts.prototype._generateTweetSelector = function(id) {
   if ($(selector).data() == null)
     return false;
   return selector;
+}
+
+TweetDarts.prototype._inSupportedCollection = function() {
+  var self = this;
+  var current = self.getCurrentCollection();
+  var result = ($.inArray(current, self.supportedCollections) < 0) ? false : true;
+  console.log(result, current);
+  return result;
 }
